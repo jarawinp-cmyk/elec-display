@@ -232,3 +232,4 @@ Feel free to fork, modify, and adapt this project for your own elections or even
 Built with ❤️ using Next.js, Tailwind CSS, Supabase, and Framer Motion
 # elec-display
 # elec-display
+# elec-diaplay
