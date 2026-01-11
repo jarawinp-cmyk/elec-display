@@ -16,7 +16,22 @@ export default function Home() {
         </div>
 
         {/* Navigation Cards */}
-        <div className="grid md:grid-cols-2 gap-6 mb-12">
+        <div className="grid md:grid-cols-3 gap-6 mb-12">
+          {/* TV Display Card */}
+          <a
+            href="/tv"
+            className="group bg-gradient-to-br from-red-600 to-orange-600 p-8 rounded-3xl shadow-2xl hover:shadow-red-500/50 transition-all transform hover:scale-105"
+          >
+            <div className="text-6xl mb-4">📺</div>
+            <h3 className="text-2xl font-bold mb-2">TV Display</h3>
+            <p className="text-red-100 mb-4">
+              หน้าแสดงผลสำหรับทีวี
+            </p>
+            <div className="text-sm text-red-200">
+              Full-screen landscape view
+            </div>
+          </a>
+
           {/* Dashboard Card */}
           <a
             href="/dashboard"
@@ -53,7 +68,15 @@ export default function Home() {
           <h3 className="text-xl font-bold mb-4 text-slate-300">
             ℹ️ ข้อมูลการเลือกตั้ง
           </h3>
-          <div className="grid md:grid-cols-2 gap-6 text-slate-400">
+          <div className="grid md:grid-cols-3 gap-6 text-slate-400">
+            <div>
+              <div className="text-red-400 font-semibold mb-2">📺 TV Display</div>
+              <ul className="space-y-1 text-sm">
+                <li>• แสดงทั้งหมดในหน้าเดียว</li>
+                <li>• ไม่ต้องเลื่อน</li>
+                <li>• สำหรับจอทีวี Landscape</li>
+              </ul>
+            </div>
             <div>
               <div className="text-pink-400 font-semibold mb-2">🎀 ใบชมพู - นายก อบต.</div>
               <ul className="space-y-1 text-sm">

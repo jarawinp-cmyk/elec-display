@@ -15,6 +15,7 @@ export default function ObserverInputPage() {
   const [selectedVillage, setSelectedVillage] = useState(1);
   const [ballotType, setBallotType] = useState(BALLOT_TYPES.MAYOR);
   const [lastUpdate, setLastUpdate] = useState('');
+  const [lastIncrement, setLastIncrement] = useState(1); // Track if last action was add or remove
   const [currentVotes, setCurrentVotes] = useState({});
   const [pendingUpdates, setPendingUpdates] = useState({}); // Track pending updates per candidate
 
@@ -112,7 +113,10 @@ export default function ObserverInputPage() {
 
     // Show feedback message
     const candidateName = getCandidateByNumber(ballotType, candidateNumber, selectedVillage)?.name || candidateNumber;
-    setLastUpdate(`+${increment} คะแนน → ${candidateName} (รอส่ง...)`);
+    const sign = increment > 0 ? '+' : '';
+    const emoji = increment > 0 ? '✅' : '⚠️';
+    setLastUpdate(`${emoji} ${sign}${increment} คะแนน → ${candidateName}`);
+    setLastIncrement(increment); // Store for toast color
 
     // Clear message after 2 seconds
     setTimeout(() => setLastUpdate(''), 2000);
@@ -131,6 +135,22 @@ export default function ObserverInputPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
+      {/* Toast Notification - Floating */}
+      {lastUpdate && (
+        <motion.div
+          initial={{ opacity: 0, y: -20, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -20, scale: 0.9 }}
+          className={`fixed top-20 left-1/2 transform -translate-x-1/2 z-50 text-white px-6 py-3 rounded-full shadow-2xl font-semibold ${
+            lastIncrement > 0
+              ? 'bg-gradient-to-r from-green-500 to-emerald-500'
+              : 'bg-gradient-to-r from-red-500 to-orange-500'
+          }`}
+        >
+          {lastUpdate}
+        </motion.div>
+      )}
+
       {/* Header */}
       <div className="bg-gradient-to-r from-pink-600 to-purple-600 p-6 shadow-lg">
         <h1 className="text-2xl font-bold text-center mb-1">
@@ -199,13 +219,6 @@ export default function ObserverInputPage() {
           </div>
         </div>
 
-        {/* Last Update Message */}
-        {lastUpdate && (
-          <div className="bg-green-500 text-white p-4 rounded-xl text-center font-medium animate-pulse">
-            ✅ {lastUpdate}
-          </div>
-        )}
-
         {/* Candidates Voting Buttons */}
         <div className="space-y-3">
           <h2 className="text-lg font-semibold text-slate-300 px-2">
@@ -257,22 +270,28 @@ export default function ObserverInputPage() {
                 </div>
 
                 {/* Vote Buttons */}
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-4 gap-2">
+                  <button
+                    onClick={() => handleIncrement(candidate.number, -1)}
+                    className="bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold py-4 px-4 rounded-xl transition-all transform active:scale-95 shadow-lg"
+                  >
+                    <div className="text-2xl">-1</div>
+                  </button>
                   <button
                     onClick={() => handleIncrement(candidate.number, 1)}
-                    className="bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 px-6 rounded-xl transition-all transform active:scale-95 shadow-lg"
+                    className="bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 px-4 rounded-xl transition-all transform active:scale-95 shadow-lg"
                   >
                     <div className="text-2xl">+1</div>
                   </button>
                   <button
                     onClick={() => handleIncrement(candidate.number, 5)}
-                    className="bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-4 px-6 rounded-xl transition-all transform active:scale-95 shadow-lg"
+                    className="bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-4 px-4 rounded-xl transition-all transform active:scale-95 shadow-lg"
                   >
                     <div className="text-2xl">+5</div>
                   </button>
                   <button
                     onClick={() => handleIncrement(candidate.number, 10)}
-                    className="bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold py-4 px-6 rounded-xl transition-all transform active:scale-95 shadow-lg"
+                    className="bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold py-4 px-4 rounded-xl transition-all transform active:scale-95 shadow-lg"
                   >
                     <div className="text-2xl">+10</div>
                   </button>
